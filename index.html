@@ -5,6 +5,28 @@
   <title>MacroBites</title>
 
   <style>
+    details {
+      border-top: 1px solid #e5e7eb;
+      padding-top: 8px;
+    }
+    
+    summary {
+      list-style: none;
+    }
+    
+    summary::-webkit-details-marker {
+      display: none;
+    }
+    
+    summary::after {
+      content: " +";
+      font-weight: bold;
+    }
+    
+    details[open] summary::after {
+      content: " −";
+    }
+        
     body {
       font-family: system-ui, Arial;
       margin: 24px;
