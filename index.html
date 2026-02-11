@@ -184,12 +184,19 @@
             </div>
 
             ${ingredients ? `
-              <div><b>Ingredients</b>${ingredients}</div>
+              <details style="margin-top:8px;">
+                <summary style="cursor:pointer; font-weight:600;">Ingredients</summary>
+                ${ingredients}
+              </details>
+            ` : ''}
+            
+            ${instructions ? `
+              <details style="margin-top:8px;">
+                <summary style="cursor:pointer; font-weight:600;">Instructions</summary>
+                ${instructions}
+              </details>
             ` : ''}
 
-            ${instructions ? `
-              <div style="margin-top:8px;"><b>Instructions</b>${instructions}</div>
-            ` : ''}
           </div>
         `;
       }).join('');
