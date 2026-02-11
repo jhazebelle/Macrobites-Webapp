@@ -212,6 +212,12 @@
     async function init() {
       const res = await fetch(url);
       const data = await res.json();
+
+      // Show real Google API errors instead of silently failing
+      if (!res.ok) {
+        throw new Error(data?.error?.message || `Google Sheets API error (HTTP ${res.status})`);
+      }
+
       const rows = data.values || [];
       const headers = rows[0] || [];
       const body = rows.slice(1);
