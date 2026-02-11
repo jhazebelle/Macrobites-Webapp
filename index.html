@@ -2,156 +2,210 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>Macro Bites</title>
+  <title>MacroBites</title>
+
   <style>
-    body { font-family: system-ui, Arial; margin: 24px; }
+    body {
+      font-family: system-ui, Arial;
+      margin: 24px;
+      text-align: center;
+    }
+
+    header {
+      padding: 20px 0;
+    }
+
+    .site-logo {
+      max-width: 150px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+
     .row { margin-bottom: 16px; }
+
     .search-input {
-		width: 100%;
-		max-width: 600px;
-		padding: 12px 14px;
-		font-size: 16px;
-		border: 1px solid #d1d5db;
-		border-radius: 8px;
-		background-color: #ffffff;
-		color: #111827;
-		outline: none;
-		box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-		transition: border-color 0.2s ease, box-shadow 0.2s ease;
-	}
+      width: 100%;
+      max-width: 600px;
+      padding: 12px 14px;
+      font-size: 16px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      background-color: #ffffff;
+      color: #111827;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      display: block;
+      margin: 0 auto;
+    }
 
-	.search-input:focus {
-		border-color: #3b82f6;
-		box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
-	}
-    .pill { display:inline-block; padding:4px 8px; border:1px solid #ddd; border-radius:999px; font-size:12px; margin-right:6px; }
-    .card { border:1px solid #e5e7eb; border-radius:12px; padding:14px; margin:14px 0; }
-    .muted { color:#6b7280; }
-    .title { font-weight:600; font-size:18px; margin:0 0 6px; }
-    .stack { display:flex; gap:16px; flex-wrap:wrap; }
-    .kv { min-width:120px; }
-    .kv b { display:block; font-size:12px; color:#6b7280; }
-    .empty { font-style:italic; color:#9ca3af; }
-	
-	.card img {
-	  display: block;
-	  width: 100%;
-	  max-height: 180px;   /* keep it short */
-	  object-fit: cover;   /* crop nicely instead of squishing */
-	  border-radius: 8px;
-	  margin-bottom: 8px;
-	}
+    .search-input:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+    }
+
+    .card {
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 16px;
+      margin: 20px auto;
+      max-width: 700px;
+      text-align: left;
+    }
+
+    .title {
+      font-weight: 600;
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+
+    .stack {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+
+    .kv {
+      min-width: 120px;
+    }
+
+    .kv b {
+      display: block;
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 4px 8px;
+      border: 1px solid #ddd;
+      border-radius: 999px;
+      font-size: 12px;
+      margin-right: 6px;
+      margin-top: 4px;
+    }
+
+    .card ul {
+      padding-left: 20px;
+      margin-top: 6px;
+    }
+
+    .empty {
+      font-style: italic;
+      color: #9ca3af;
+    }
   </style>
-</head>
-<body>
-  <h2>🍽️ Macro Bites</h2>
 
-  <div style="background:#f9fafb; border:1px solid #e5e7eb; border-radius:8px; padding:12px 16px; max-width:600px; margin-bottom:16px;">
-	<p style="margin:0; color:#374151; font-size:15px; line-height:1.5;">
-		This app helps you quickly find dinner ideas with their macros so you can stay on track with healthy eating and weight loss goals.
-	</p>
-	<p style="margin:8px 0 0; color:#6b7280; font-size:14px; line-height:1.4;">
-		<strong>Note:</strong> Values are for plain, cooked meat without added fats or sauces, rounded to the nearest tenth.
-	</p>
+</head>
+
+<body>
+
+  <header>
+    <img src="macrobites-logo.png" class="site-logo" alt="MacroBites - Eat Clean. Change the World.">
+  </header>
+
+  <h2>🍽️ MacroBites</h2>
+
+  <div style="background:#f9fafb; border:1px solid #e5e7eb; border-radius:8px; padding:12px 16px; max-width:600px; margin:0 auto 16px;">
+    <p style="margin:0; font-size:15px;">
+      This app helps you quickly find dinner ideas with their macros so you can stay on track with healthy eating goals.
+    </p>
+    <p style="margin-top:8px; font-size:14px; color:#6b7280;">
+      <strong>Note:</strong> Values are for plain, cooked meat without added fats or sauces.
+    </p>
   </div>
-  
+
   <div class="row">
-    <input id="search" class="search-input" placeholder="Search dish name (e.g., 'asada', 'pho', 'jambalaya')">
+    <input id="search" class="search-input" placeholder="Search dish name (e.g., asada, pho, jambalaya)">
   </div>
-  <div id="results" class="row"></div>
+
+  <div id="results"></div>
 
   <script>
     const SHEET_ID = '1-hJLtIj9o_-uY3RBEIDnLOBPcBKEGjJNu32o-14ELDM';
-    const TAB_NAME = 'Sheet1'; 
+    const TAB_NAME = 'Sheet1';
     const API_KEY = 'AIzaSyD36RyvBKh_0oQG8O6f3jKCCF_0OMT7Y3Y';
     const RANGE = encodeURIComponent(`${TAB_NAME}!A1:Z998`);
 
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`;
 
-    const state = { headers: [], rows: [], items: [] };
+    const state = { headers: [], items: [] };
 
-    // Utility: safe cell -> value or empty dash
-    const v = (x) => (x === undefined || x === null || x === '' ? '—' : x);
+    const v = (x) => (x ? x : '—');
 
-    // Debounce input so we don’t fetch on every keystroke speed
-    function debounce(fn, ms=200) {
-      let t; return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
-    }
-
-    // Map a row array into a named object using headers
     function rowToObj(headers, row) {
       const obj = {};
-      headers.forEach((h, i) => {
-        obj[h] = row[i] ?? '';
-      });
+      headers.forEach((h, i) => obj[h] = row[i] ?? '');
       return obj;
     }
 
     function render(items) {
       const root = document.getElementById('results');
-      if (!items.length) { root.innerHTML = '<div class="empty">No matches. Try a different search.</div>'; return; }
+
+      if (!items.length) {
+        root.innerHTML = '<div class="empty">No matches found.</div>';
+        return;
+      }
 
       root.innerHTML = items.map(item => {
-		const image = v(item['Image']);
         const name = v(item['Dish Name']);
         const cal = v(item['Calories (4oz Protein)']);
         const p = v(item['P']);
         const c = v(item['C']);
         const f = v(item['F']);
-		
-		const ingredients = v(item['Ingredients']);
-		const instructions = v(item['Instructions']);
 
-        // Handle the two Type columns whether you renamed them or not
-        const typeA = item['Type_Protein'] ?? item['Type'] ?? '';
-        // If you kept duplicate "Type" headers, the second one won't be accessible by name,
-        // so also try to read by index fallback:
-        const idxType1 = state.headers.indexOf('Type');
-        const idxType2 = state.headers.lastIndexOf('Type');
-        const cuisineRaw = (idxType2 !== -1 && idxType2 !== idxType1) ? (state.rows.find(r => r[0] === item['No.'])?.[idxType2] ?? '') : '';
-        const typeB = item['Type_Cuisine'] ?? cuisineRaw;
+        const ingredients = item['Ingredients']
+          ? '<ul>' +
+            item['Ingredients'].split(';')
+              .map(i => `<li>${i.trim()}</li>`)
+              .join('') +
+            '</ul>'
+          : '';
 
+        const instructions = item['Instructions']
+          ? '<ul>' +
+            item['Instructions'].split(/\n|;/)
+              .map(s => s.trim())
+              .filter(Boolean)
+              .map(s => `<li>${s}</li>`)
+              .join('') +
+            '</ul>'
+          : '';
 
-		return `
-		  <div class="card">
-			${image !== '—' ? `<img src="${image}" alt="${name}">` : ``}
-			<div class="title">${name}</div>
-			<div class="stack">
-			  <div class="kv"><b>Calories (4oz Protein)</b>${cal}</div>
-			  <div class="kv"><b>Protein (g)</b>${p}</div>
-			  <div class="kv"><b>Carbs (g)</b>${c}</div>
-			  <div class="kv"><b>Fat (g)</b>${f}</div>
-			</div>
+        return `
+          <div class="card">
+            <div class="title">${name}</div>
+            <div class="stack">
+              <div class="kv"><b>Calories</b>${cal}</div>
+              <div class="kv"><b>Protein (g)</b>${p}</div>
+              <div class="kv"><b>Carbs (g)</b>${c}</div>
+              <div class="kv"><b>Fat (g)</b>${f}</div>
+            </div>
 
-			<div style="margin-top:8px;">
-			  ${typeA ? `<span class="pill">${typeA}</span>` : ``}
-			  ${typeB ? `<span class="pill">${typeB}</span>` : ``}
-			</div>
+            ${ingredients ? `
+              <div><b>Ingredients</b>${ingredients}</div>
+            ` : ''}
 
-			${(ingredients !== '—' || instructions !== '—') ? `
-			  <details style="margin-top:12px;">
-				<summary style="cursor:pointer; font-weight:600;">Ingredients & Instructions</summary>
-				${ingredients !== '—' ? `
-				  <div style="margin-top:10px;">
-					<div class="muted" style="font-weight:600;">Ingredients</div>
-					<div>${ingredients}</div>
-				  </div>` : ``}
-				${instructions !== '—' ? `
-				  <div style="margin-top:10px;">
-					<div class="muted" style="font-weight:600;">Instructions</div>
-					<div>${instructions}</div>
-				  </div>` : ``}
-			  </details>
-			` : ``}
-		  </div>
-		`;
+            ${instructions ? `
+              <div style="margin-top:8px;"><b>Instructions</b>${instructions}</div>
+            ` : ''}
+          </div>
+        `;
       }).join('');
     }
 
     function doSearch(q) {
       q = q.trim().toLowerCase();
-      if (!q) { render(state.items.slice(0, 10)); return; } // show a few by default
-      const results = state.items.filter(it => (it['Dish Name'] || '').toLowerCase().includes(q));
+      if (!q) {
+        render(state.items.slice(0, 10));
+        return;
+      }
+
+      const results = state.items.filter(it =>
+        (it['Dish Name'] || '').toLowerCase().includes(q)
+      );
+
       render(results);
     }
 
@@ -163,23 +217,20 @@
       const body = rows.slice(1);
 
       state.headers = headers;
-      state.rows = body;
-
-      // Normalize each row into an object
       state.items = body.map(r => rowToObj(headers, r));
 
-      // Initial render
       render(state.items.slice(0, 10));
     }
 
     init().catch(err => {
-      document.getElementById('results').innerHTML = `<div class="empty">Error loading data: ${err}</div>`;
+      document.getElementById('results').innerHTML =
+        `<div class="empty">Error loading data: ${err}</div>`;
     });
 
-    document.getElementById('search').addEventListener('input', debounce(e => {
+    document.getElementById('search').addEventListener('input', e => {
       doSearch(e.target.value);
-    }, 250));
+    });
   </script>
+
 </body>
 </html>
-
