@@ -161,19 +161,23 @@
 
     function render(items) {
       const root = document.getElementById('results');
-
+    
       if (!items.length) {
         root.innerHTML = '<div class="empty">No matches found.</div>';
         return;
       }
-
+    
       root.innerHTML = items.map(item => {
         const name = v(item['Dish Name']);
         const cal = v(item['Calories (4oz Protein)']);
         const p = v(item['P']);
         const c = v(item['C']);
         const f = v(item['F']);
-
+    
+        const img = item['Image']
+          ? `<img src="${item['Image']}" alt="${name}" style="width:100%; max-width:260px; border-radius:12px; margin-top:10px;" />`
+          : '';
+    
         const ingredients = item['Ingredients']
           ? '<ul>' +
             item['Ingredients'].split(';')
@@ -181,7 +185,7 @@
               .join('') +
             '</ul>'
           : '';
-
+    
         const instructions = item['Instructions']
           ? '<ul>' +
             item['Instructions'].split(/\n|;/)
@@ -191,31 +195,33 @@
               .join('') +
             '</ul>'
           : '';
-
+    
         return `
           <div class="card">
             <div class="title">${name}</div>
+    
             <div class="stack">
               <div class="kv"><b>Calories</b>${cal}</div>
               <div class="kv"><b>Protein (g)</b>${p}</div>
               <div class="kv"><b>Carbs (g)</b>${c}</div>
               <div class="kv"><b>Fat (g)</b>${f}</div>
             </div>
-
+    
+            ${img}
+    
             ${ingredients ? `
               <details style="margin-top:8px;">
                 <summary style="cursor:pointer; font-weight:600;">Ingredients</summary>
                 ${ingredients}
               </details>
             ` : ''}
-            
+    
             ${instructions ? `
               <details style="margin-top:8px;">
                 <summary style="cursor:pointer; font-weight:600;">Instructions</summary>
                 ${instructions}
               </details>
             ` : ''}
-
           </div>
         `;
       }).join('');
@@ -235,24 +241,6 @@
       render(results);
     }
 
-    async function init() {
-      const res = await fetch(url);
-      const data = await res.json();
-
-      // Show real Google API errors instead of silently failing
-      if (!res.ok) {
-        throw new Error(data?.error?.message || `Google Sheets API error (HTTP ${res.status})`);
-      }
-
-      const rows = data.values || [];
-      const headers = rows[0] || [];
-      const body = rows.slice(1);
-
-      state.headers = headers;
-      state.items = body.map(r => rowToObj(headers, r));
-
-      render(state.items.slice(0, 10));
-    }
 
     async function init() {
       const res = await fetch(url);
@@ -275,7 +263,9 @@
       if (!res.ok) {
         throw new Error(data?.error?.message || `Function error (HTTP ${res.status})`);
       }
-    
+      
+
+      
       const rows = data.values || [];
       const headers = rows[0] || [];
       const body = rows.slice(1);
@@ -285,6 +275,11 @@
     
       render(state.items.slice(0, 10));
     }
+
+      init().catch(err => {
+        document.getElementById('results').innerHTML =
+          `<div class="empty">Error loading data: ${err}</div>`;
+      });    
 
     document.getElementById('search').addEventListener('input', e => {
       doSearch(e.target.value);
