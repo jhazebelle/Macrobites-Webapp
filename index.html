@@ -276,10 +276,10 @@
       render(state.items.slice(0, 10));
     }
 
-      init().catch(err => {
+    init().catch(err => {
         document.getElementById('results').innerHTML =
           `<div class="empty">Error loading data: ${err}</div>`;
-      });    
+    });    
 
     document.getElementById('search').addEventListener('input', e => {
       doSearch(e.target.value);
