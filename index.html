@@ -145,10 +145,7 @@
   <div id="results"></div>
 
   <script>
-    const SHEET_ID = '1-hJLtIj9o_-uY3RBEIDnLOBPcBKEGjJNu32o-14ELDM';
-    const TAB_NAME = 'Sheet1';
-    const API_KEY = 'YOUR_API_KEY_HERE';
-    const RANGE = encodeURIComponent(`${TAB_NAME}!A1:Z998`);
+
 
     const url = "/.netlify/functions/recipes";
 
@@ -257,10 +254,37 @@
       render(state.items.slice(0, 10));
     }
 
-    init().catch(err => {
-      document.getElementById('results').innerHTML =
-        `<div class="empty">Error loading data: ${err}</div>`;
-    });
+    async function init() {
+      const res = await fetch(url);
+    
+      // Read as text first (works whether it’s JSON or HTML)
+      const raw = await res.text();
+    
+      // Try to parse JSON, but don’t crash if it isn’t JSON
+      let data;
+      try {
+        data = JSON.parse(raw);
+      } catch {
+        // If function returned HTML, show it so you can diagnose quickly
+        throw new Error(
+          `Expected JSON but got non-JSON response (HTTP ${res.status}). ` +
+          `First 120 chars: ${raw.slice(0, 120)}`
+        );
+      }
+
+      if (!res.ok) {
+        throw new Error(data?.error?.message || `Function error (HTTP ${res.status})`);
+      }
+    
+      const rows = data.values || [];
+      const headers = rows[0] || [];
+      const body = rows.slice(1);
+    
+      state.headers = headers;
+      state.items = body.map(r => rowToObj(headers, r));
+    
+      render(state.items.slice(0, 10));
+    }
 
     document.getElementById('search').addEventListener('input', e => {
       doSearch(e.target.value);
