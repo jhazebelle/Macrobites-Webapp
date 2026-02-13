@@ -1,14 +1,17 @@
-export default async () => {
+exports.handler = async function (event, context) {
   try {
     const SHEET_ID = process.env.SHEET_ID;
     const TAB_NAME = process.env.TAB_NAME || "Sheet1";
     const API_KEY = process.env.GOOGLE_SHEETS_API_KEY;
 
     if (!SHEET_ID || !API_KEY) {
-      return new Response(
-        JSON.stringify({ error: "Missing env vars: SHEET_ID or GOOGLE_SHEETS_API_KEY" }),
-        { status: 500, headers: { "Content-Type": "application/json" } }
-      );
+      return {
+        statusCode: 500,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          error: "Missing env vars: SHEET_ID or GOOGLE_SHEETS_API_KEY",
+        }),
+      };
     }
 
     const range = encodeURIComponent(`${TAB_NAME}!A1:Z998`);
@@ -17,15 +20,17 @@ export default async () => {
     const res = await fetch(url);
     const data = await res.json();
 
-    return new Response(JSON.stringify(data), {
-      status: res.status,
+    return {
+      statusCode: res.status,
       headers: { "Content-Type": "application/json" },
-    });
+      body: JSON.stringify(data),
+    };
   } catch (err) {
-    return new Response(JSON.stringify({ error: String(err) }), {
-      status: 500,
+    return {
+      statusCode: 500,
       headers: { "Content-Type": "application/json" },
-    });
+      body: JSON.stringify({ error: String(err) }),
+    };
   }
 };
 
