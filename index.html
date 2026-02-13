@@ -150,7 +150,7 @@
     const API_KEY = 'YOUR_API_KEY_HERE';
     const RANGE = encodeURIComponent(`${TAB_NAME}!A1:Z998`);
 
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`;
+    const url = "/.netlify/functions/recipes";
 
     const state = { headers: [], items: [] };
 
