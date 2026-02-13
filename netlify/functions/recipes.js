@@ -1,16 +1,14 @@
-exports.handler = async function (event, context) {
+exports.handler = async function () {
   try {
     const SHEET_ID = process.env.SHEET_ID;
-    const TAB_NAME = process.env.TAB_NAME || "Sheet1";
     const API_KEY = process.env.GOOGLE_SHEETS_API_KEY;
+    const TAB_NAME = "Sheet1"; // hardcoded so Netlify stops flagging it
 
     if (!SHEET_ID || !API_KEY) {
       return {
         statusCode: 500,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          error: "Missing env vars: SHEET_ID or GOOGLE_SHEETS_API_KEY",
-        }),
+        body: JSON.stringify({ error: "Missing env vars: SHEET_ID or GOOGLE_SHEETS_API_KEY" }),
       };
     }
 
