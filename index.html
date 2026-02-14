@@ -185,13 +185,13 @@
           : '';
     
         const instructions = item['Instructions']
-          ? '<ul>' +
+          ? '<ol>' +
             item['Instructions'].split(/\n|;/)
               .map(s => s.trim())
               .filter(Boolean)
               .map(s => `<li>${s}</li>`)
               .join('') +
-            '</ul>'
+            '</ol>'
           : '';
     
         return `
